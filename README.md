@@ -1,4 +1,4 @@
-#COVID-2019 Math
+# COVID-2019 Math
 
 The purpose of this repo is to provide some base examples and tools for analyzing the
 raw data we are getting concerning the ongoing Coronavirus pandemic.
