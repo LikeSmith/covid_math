@@ -10,8 +10,8 @@ import csv
 import datetime
 import numpy as np
 
-PATH_TO_DATA_REPO = "Put/Path/to/data/here"
-PATH_TO_DATA_DIR = "csse_covid_19_data/csse_covid_19_daily_reports/"
+PATH_TO_DATA_REPO = r"D:\Users\Kyle\Documents\COVID-19\\"
+PATH_TO_DATA_DIR = r"csse_covid_19_data\csse_covid_19_daily_reports\\"
 
 
 def load_data(path=PATH_TO_DATA_REPO+PATH_TO_DATA_DIR):
