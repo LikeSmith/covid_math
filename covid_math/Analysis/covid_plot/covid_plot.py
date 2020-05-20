@@ -15,6 +15,7 @@ if __name__ == '__main__':
     data, locations, dates = load_data()
 
     data = np.sum(data, axis=0)
+    active_cases = data[:, 0] - data[:, 1] - data[:, 2]
 
     plt.figure(1)
     ax = plt.gca()
@@ -44,5 +45,15 @@ if __name__ == '__main__':
     ax.fill_between(dates, 0, data[:, 1])
     plt.xlabel('date')
     plt.legend(['active cases', 'recovered', 'dead'], loc='upper left')
+
+    plt.figure(4)
+    ax = plt.gca()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%m/%d/%Y"))
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=28))
+
+    plt.plot(dates, active_cases, '.')
+    # plt.semilogy(dates, active_cases, '.')
+    plt.xlabel('date')
+    plt.ylabel('active cases')
 
     plt.show()

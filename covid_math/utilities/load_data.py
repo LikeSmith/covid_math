@@ -10,8 +10,8 @@ import csv
 import datetime
 import numpy as np
 
-PATH_TO_DATA_REPO = "Put/Path/to/data/here"
-PATH_TO_DATA_DIR = "csse_covid_19_data/csse_covid_19_daily_reports/"
+PATH_TO_DATA_REPO = r"D:\Users\Kyle\Documents\COVID-19\\"
+PATH_TO_DATA_DIR = r"csse_covid_19_data\csse_covid_19_daily_reports\\"
 
 
 def load_data(path=PATH_TO_DATA_REPO+PATH_TO_DATA_DIR):
@@ -27,30 +27,51 @@ def load_data(path=PATH_TO_DATA_REPO+PATH_TO_DATA_DIR):
                 csv_reader = csv.reader(f)
                 data.append(np.zeros((len(locations), 3)))
                 skip_first_row = True
+                conf_i = 3
+                dead_i = 4
+                reco_i = 5
+                data_fmt = 1
+
                 for row in csv_reader:
                     if skip_first_row:
                         skip_first_row = False
+
+                        for i, item in enumerate(row):
+                            if item == 'Confirmed':
+                                conf_i = i
+                            elif item == 'Deaths':
+                                dead_i = i
+                            elif item == 'Recovered':
+                                reco_i = i
+
+                        if 'Admin2' in row:
+                            data_fmt = 2
+                        else:
+                            data_fmt = 1
                         continue
 
-                    if row[3] == '':
-                        row[3] = '0'
-                    if row[4] == '':
-                        row[4] = '0'
-                    if row[5] == '':
-                        row[5] = '0'
+                    if row[conf_i] == '':
+                        row[conf_i] = '0'
+                    if row[dead_i] == '':
+                        row[dead_i] = '0'
+                    if row[reco_i] == '':
+                        row[reco_i] = '0'
 
-                    loc = row[0:2]
+                    if data_fmt == 1:
+                        loc = row[0:2]
+                    else:
+                        loc = row[2:4]
                     if loc in locations != -1:
                         i = locations.index(loc)
-                        data[-1][i, 0] = float(row[3])
-                        data[-1][i, 1] = float(row[4])
-                        data[-1][i, 2] = float(row[5])
+                        data[-1][i, 0] += float(row[conf_i])
+                        data[-1][i, 1] += float(row[dead_i])
+                        data[-1][i, 2] += float(row[reco_i])
                     else:
                         data[-1] = np.concatenate([data[-1], np.zeros((1, 3))], axis=0)
                         locations.append(loc)
-                        data[-1][-1, 0] = float(row[3])
-                        data[-1][-1, 1] = float(row[4])
-                        data[-1][-1, 2] = float(row[5])
+                        data[-1][-1, 0] += float(row[conf_i])
+                        data[-1][-1, 1] += float(row[dead_i])
+                        data[-1][-1, 2] += float(row[reco_i])
 
     # Pad data frames with zeros and stack into single array
     n_locations = len(locations)
